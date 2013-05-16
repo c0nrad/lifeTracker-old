@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="hero-unit">
+  <form action="login.html" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input class="btn" type="submit" value="Submit" />
+  </form> <br />  
+</div>
+
+<!-- <a href="forgotAccount.html"> Forgot Username or Password? </a> -->
+
+{% endblock %}

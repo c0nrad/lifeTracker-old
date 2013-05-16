@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3> Events </h3>
+<br />
+<table class="table table-hover table-striped">
+  <tr>
+    <th>I.D</th>
+    <th>Event Name</th>
+    <th>Label</th>
+    <th>Datetime</th>
+    <th>Links</th>
+    <th>Description</th>
+  </tr>
+  {% for event in events %}
+  <tr>
+    <td>{{event.id}}</td>
+    <td>{{event.name}}</td>
+    <td>{{event.label}}</td>
+    <td>{{event.datetime}}</td>
+    <td> 
+      {% for link in event.links.all %}
+      {{ link.name }}
+      {% endfor %}
+    </td>
+    <td>{{event.description}}</td>
+  </tr>
+  {% endfor %}
+</table> 
+
+
+{% endblock %}

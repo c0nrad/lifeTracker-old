@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Life Tracker</h1> <h3> Control Your Life </h3>
+
+<a href="register.html"> Create a New Account </a>
+<br />
+<a href="login.html"> Login! </a>
+
+</body>
+</html>
+
