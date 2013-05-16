@@ -2,7 +2,7 @@ import datetime as dt
 from django import forms
 from django.core import validators
 from django.contrib.auth.models import User
-from lifetracker.models import Label, Event
+from lifetracker.models import  Event
 
 class RegistrationForm(forms.Form):
     username = forms.CharField(required=True)
@@ -33,10 +33,10 @@ class AddEventForm(forms.Form):
      '%m/%d/%y',              # '10/25/06'
      '%m-%d-%Y %I:%M:%S %p']   #  05-11-2013 12:59:27 PM
 
-    name = forms.CharField(required=True)
     label = forms.CharField(required=True)
-    datetime = forms.DateTimeField(required=True, initial=dt.datetime.now(), input_formats = input_formats)
-    description = forms.CharField(required=False)
+    startdatetime = forms.DateTimeField(required=True, initial=dt.datetime.now(), input_formats = input_formats)
+    enddatetime = forms.DateTimeField(required=False, initial=dt.datetime.now(), input_formats = input_formats)
+    description = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows':4, 'cols':50}))
 
     def __init__(self, *args, **kwargs):
         request = kwargs.pop('request', None)

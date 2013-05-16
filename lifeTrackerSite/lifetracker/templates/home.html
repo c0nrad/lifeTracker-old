@@ -1,29 +1,93 @@
 {% extends 'base.html' %}
 
+
+{% load static %}
+
+
+{% block extraheaders %}
+<!--Timeline-->
+<script type="text/javascript" src="{% static "timeline/timeline.js"%}"></script>
+<link rel="stylesheet" type="text/css" href="{% static "timeline/timeline.css"%}">
+
+<script type="text/javascript">
+        var timeline;
+        var data;
+
+        // Called when the Visualization API is loaded.
+        function drawVisualization() {
+            // Create a JSON data table
+            data = [
+                {% for event in events %}
+                {
+                    'start': new Date("{{ event.startdatetime.isoformat }}"),
+                    {% if event.enddatetime %}
+                    'end': new Date("{{ event.enddatetime.isoformat }}"),
+                    {% endif %}
+                    'content': '{{event.label}}'
+                },
+                {% endfor %}
+
+            ];
+
+            // specify options
+            var options = {
+                'width':  '100%',
+                'height': '300px',
+                'editable': true,   // enable dragging and editing events
+                'style': 'box'
+            };
+
+            // Instantiate our timeline object.
+            timeline = new links.Timeline(document.getElementById('mytimeline'));
+
+            
+            /*
+            function onRangeChanged(properties) {
+                document.getElementById('info').innerHTML += 'rangechanged ' +
+                        properties.start + ' - ' + properties.end + '<br>';
+            }
+
+            // attach an event listener using the links events handler
+            links.events.addListener(timeline, 'rangechanged', onRangeChanged);
+            */
+
+            // Draw our timeline with the created data and options
+            timeline.draw(data, options);
+        }
+    </script>
+{% endblock %}
+
+{% block body %}
+<body onload="drawVisualization();">
+{% endblock %}
+
 {% block content %}
 
+<a class="btn" href="addEvent.html"> Add Event </a>
+<a class="btn" href="analysis.html"> Analysis </a>
+<a class="btn" href="timeline.html"> Timeline </a>
+
+
+<h3> Timeline </h3>
+
+<div id="mytimeline"></div>
+
+<br /> <br />
 <h3> Events </h3>
-<br />
 <table class="table table-hover table-striped">
   <tr>
     <th>I.D</th>
-    <th>Event Name</th>
     <th>Label</th>
-    <th>Datetime</th>
-    <th>Links</th>
+    <th>Start Datetime</th>
+    <th>End Datetime</th>
     <th>Description</th>
   </tr>
   {% for event in events %}
   <tr>
     <td>{{event.id}}</td>
-    <td>{{event.name}}</td>
     <td>{{event.label}}</td>
-    <td>{{event.datetime}}</td>
-    <td> 
-      {% for link in event.links.all %}
-      {{ link.name }}
-      {% endfor %}
-    </td>
+    <td>{{event.startdatetime}}</td>
+    <td>{{event.enddatetime}}</td>
     <td>{{event.description}}</td>
   </tr>
   {% endfor %}

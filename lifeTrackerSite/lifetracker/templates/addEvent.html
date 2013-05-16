@@ -9,24 +9,28 @@
 {% block content %}
 <form action="addEvent.html" method="post">{% csrf_token %}
   {{ form.non_field_errors }}
-  <div class="fieldWrapper">
-    {{ form.name.errors }}
-    <label for="id_name"> Name: </label>
-    {{ form.name }}
-  </div>
+
   
+  <div id="startdatetimepicker" class="input-append" >
+    <label for="id_startdatetime"> Start Datetime: </label>
+    <input id="id_startdatetime" data-format="MM-dd-yyyy HH:mm:ss PP" name="startdatetime" type="text" value="{% now "m-d-Y h:i:s A" %}"/>
+    <span class="add-on">
+      <i data-time-icon="icon-time" data-date-icon="icon-calendar"> </i>
+    </span>
+  </div>
+
+  <div id="enddatetimepicker" class="input-append" >
+    <label for="id_enddatetime"> End Datetime: </label>
+    <input id="id_enddatetime" data-format="MM-dd-yyyy HH:mm:ss PP" name="enddatetime" type="text" value=""/>
+    <span class="add-on">
+      <i data-time-icon="icon-time" data-date-icon="icon-calendar"> </i>
+    </span>
+  </div>
+
   <div class="fieldWrapper">
     {{ form.label.errors }}
     <label for="id_label"> Label: </label>
     {{ form.label }}
-  </div>
-  
-  <div id="datetimepicker2" class="input-append" >
-    <label for="id_datetime"> Datetime: </label>
-    <input id="id_datetime" data-format="MM-dd-yyyy HH:mm:ss PP" name="datetime" type="text" value="{% now "m-d-Y h:i:s a" %}"/>
-    <span class="add-on">
-      <i data-time-icon="icon-time" data-date-icon="icon-calendar"> </i>
-    </span>
   </div>
   
   <div class="fieldWrapper">
@@ -35,11 +39,6 @@
     {{ form.description }}
   </div>
   
-  <div class="fieldWrapper">
-    {{ form.link.errors }}
-    <label for="id_link"> Link: </label>
-    {{ form.link }}
-  </div>
   
   <input class="btn" type="submit" value="Submit" />
 </form>
@@ -63,12 +62,18 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-  $(function() {
-  $('#datetimepicker2').datetimepicker({
-  language: 'en',
-  pick12HourFormat: true
-  });
-  });
+  
+     $(function() {
+        $('#startdatetimepicker').datetimepicker({
+           language: 'en',
+           pick12HourFormat: true
+        });
+        $('#enddatetimepicker').datetimepicker({
+           language: 'en',
+           pick12HourFormat: true
+        });
+  
+     });
   });
 </script>
 

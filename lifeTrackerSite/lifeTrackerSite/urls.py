@@ -14,9 +14,7 @@ urlpatterns = patterns('',
     url(r'^logout.html$', 'lifetracker.views.logout', name='logout'),
     url(r'^analysis.html$', 'lifetracker.views.analysis', name='analysis'),
     url(r'^forgotAccount.html$', 'lifetracker.views.forgotAccount', name="forgotAccount"),
-    url(r'^base.html$', 'lifetracker.views.base', name="base"),
     url(r'^timeline.html$', 'lifetracker.views.timeline', name='timeline'),
-    url(r'^datetime.html$', 'lifetracker.views.datetime', name='datetime'),
                        
     # url(r'^lifeTrackerSite/', include('lifeTrackerSite.foo.urls')),
 

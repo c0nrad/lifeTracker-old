@@ -6,24 +6,17 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
-from lifetracker.models import Label, Event
+from lifetracker.models import Event
 from lifetracker.forms import RegistrationForm, LoginForm, AddEventForm, ForgotAccountForm
 from analysis import occurrencesPerLabel
 
 def index(request):
-    if request.user.is_authenticated():
-        return HttpResponseRedirect('home.html')
     return render_to_response('index.html', {}, context_instance=RequestContext(request))
 
-def base(request):
-    return render_to_response('base.html', {}, context_instance=RequestContext(request))
-
 def timeline(request):
-    return render_to_response('timeline.html', {}, context_instance=RequestContext(request))
+    events = request.user.profile.events.all()
+    return render_to_response('timeline.html', { "events" : events}, context_instance=RequestContext(request))
 
-def datetime(request):
-    return render_to_response('datetime.html', {}, context_instance=RequestContext(request))
-    
 @csrf_protect
 def login(request):
     if request.method == "POST":
@@ -80,27 +73,16 @@ def addEvent(request):
     if request.method == "POST":
         form = AddEventForm(request.POST, request=request)
         if form.is_valid():
-            name = form.cleaned_data['name']
             label = form.cleaned_data['label']
-            datetime = form.cleaned_data['datetime']
+            startdatetime = form.cleaned_data['startdatetime']
+            enddatetime = form.cleaned_data['enddatetime']
             description = form.cleaned_data['description']
-            link = form.cleaned_data['link']
             
-            if len(Label.objects.filter(value=label)) >= 1:
-                label = Label.objects.get(value=label)
-            else:
-                label = Label(value=label)
-                label.save()
-                request.user.profile.labels.add(label)
-                
-            event = Event(name=name,label=label, datetime=datetime, description=description)
+            event = Event(label=label, startdatetime=startdatetime, enddatetime=enddatetime, description=description)
             event.save()
-            if link: # Must be done after the inital save (many-to-many relationship requirement)
-                event.links.add(link)
-                event.save()
-                link.links.add(event)
-                link.save()
 
+            event.save()
+            
             # Tie event to user
             request.user.profile.events.add(event)
             return HttpResponseRedirect('home.html')
