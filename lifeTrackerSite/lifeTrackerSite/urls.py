@@ -15,7 +15,9 @@ urlpatterns = patterns('',
     url(r'^analysis.html$', 'lifetracker.views.analysis', name='analysis'),
     url(r'^forgotAccount.html$', 'lifetracker.views.forgotAccount', name="forgotAccount"),
     url(r'^timeline.html$', 'lifetracker.views.timeline', name='timeline'),
-                       
+    url(r'^deleteEvent/(\d+)', 'lifetracker.views.deleteEvent', name='deleteEvent'),
+   url(r'^editEvent/(\d+)', 'lifetracker.views.editEvent', name='editEvent'),
+
     # url(r'^lifeTrackerSite/', include('lifeTrackerSite.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

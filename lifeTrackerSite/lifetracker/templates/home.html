@@ -81,6 +81,7 @@
     <th>Start Datetime</th>
     <th>End Datetime</th>
     <th>Description</th>
+    <th>Actions</th>
   </tr>
   {% for event in events %}
   <tr>
@@ -89,6 +90,7 @@
     <td>{{event.startdatetime}}</td>
     <td>{{event.enddatetime}}</td>
     <td>{{event.description}}</td>
+    <td> <a href="editEvent/{{event.id}}" class="btn"> Edit </a> <a href="deleteEvent/{{event.id}}" class="btn"> Delete </a> <td>
   </tr>
   {% endfor %}
 </table> 

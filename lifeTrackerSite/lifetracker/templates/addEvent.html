@@ -4,13 +4,21 @@
 <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" media="screen"
       href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">
+
+<script type="text/javascript">
+$(document).ready(function() {
+var dataSource = {{labels|safe}}
+$('#id_label').typeahead({source: dataSource}).attr('autocomplete', 'off');
+
+});
+
+</script>
 {% endblock %}
 
 {% block content %}
 <form action="addEvent.html" method="post">{% csrf_token %}
   {{ form.non_field_errors }}
 
-  
   <div id="startdatetimepicker" class="input-append" >
     <label for="id_startdatetime"> Start Datetime: </label>
     <input id="id_startdatetime" data-format="MM-dd-yyyy HH:mm:ss PP" name="startdatetime" type="text" value="{% now "m-d-Y h:i:s A" %}"/>
@@ -32,6 +40,7 @@
     <label for="id_label"> Label: </label>
     {{ form.label }}
   </div>
+
   
   <div class="fieldWrapper">
     {{ form.description.errors }}

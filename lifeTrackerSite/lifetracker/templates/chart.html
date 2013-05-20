@@ -13,9 +13,11 @@
   
   // Create the data table.
   var data = new google.visualization.DataTable();
-  data.addColumn('string', 'Topping');
-  data.addColumn('number', 'Slices');
-  data.addRows({{ data }});
+  {% for column in chart.columns %}
+  data.addColumn( "{{column.x}}", "{{column.y}}" )
+  {% endfor%}
+
+  data.addRows({{ chart.data|safe }});
   
   // Set chart options
   var options = {'title': "{{ title }}",
@@ -23,7 +25,7 @@
   'height':300};
   
   // Instantiate and draw our chart, passing in some options.
-  var chart = new google.visualization.PieChart(document.getElementById('{{id}}'));
+  var chart = new google.visualization.{{chart.type}}(document.getElementById('{{chart.id}}'));
   chart.draw(data, options);
   }
 </script>
