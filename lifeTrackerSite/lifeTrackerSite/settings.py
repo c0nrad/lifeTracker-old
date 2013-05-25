@@ -3,9 +3,11 @@ import socket
 from django.conf import global_settings
 
 
-if socket.gethostname() == 'lifetracker.com':
-    DEBUG= False
+if socket.gethostname() == 'ip-10-245-115-219':
+    DEBUG= True
+    BASE_DIR="/lifeTracker/lifeTrackerSite/"
 else:
+    BASE_DIR = "/root/Projects/lifeTracker/lifeTrackerSite/"
     DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG
@@ -18,7 +20,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'LTDataBase',                      # Or path to database file if using sqlite3.
+        'NAME': os.path.join(BASE_DIR, 'LTDataBase'),                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
@@ -27,7 +29,7 @@ DATABASES = {
     }
 }
 
-BASE_DIR = "/root/Projects/lifeTracker/lifeTrackerSite/"
+#BASE_DIR = "/root/Projects/lifeTracker/lifeTrackerSite/"
 AUTH_PROFILE_MODULE = "lifetracker.UserProfile"
 LOGIN_URL="/login/"
 DAJAXICE_MEDIA_PREFIX="dajaxice"
