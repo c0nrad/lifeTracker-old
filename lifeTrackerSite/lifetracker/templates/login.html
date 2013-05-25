@@ -2,12 +2,50 @@
 
 {% block content %}
 
-<div class="hero-unit">
-  <form action="login.html" method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input class="btn" type="submit" value="Submit" />
-  </form> <br />  
+
+<div class="row-fluid">
+    <div class="span4">
+		<div class="hero-unit">
+
+		  	<form action="/login/" method="post">{% csrf_token %}
+		  		{{ form.non_field_errors }}
+
+				<fieldset>
+				<legend>Login</legend>
+
+	    		<div class="fieldWrapper">
+	        		{{ form.username.errors }}
+	       			<label for="id_username">Username:</label>
+	       			<input id="id_username" name="username" type="text" value="" placeholder="Username" />
+	    		</div>
+
+			    <div class="fieldWrapper">
+			        {{ form.password.errors }}
+			        <label for="id_password">Password:</label>
+			        <input id="id_password" name="password" type="password" placeholder="Password" />
+			    </div>
+	  
+			    <input class="btn" type="submit" value="Submit" />
+
+		  	</form> 
+		  	<br />
+		  	<hr>
+		  	<small> <a href="/register/"> Register </a> - <a href="/forgotAccount/"> Forgot Account </a> </small>
+		</div>
+    </div>
+
+    <div class="span8">
+    	<div class="hero-unit">
+    		<h3> Welcome back! </h3>
+    			<p> You must be logged in to continue. Please enter your username and password into the form to continue. </p> <br />
+    			<h3> Stay Secure </h3>
+    			<p> We do our absolute best to keep your information secure at all times. To make sure it stays secure, never give anyone your password, and don't use the same password.
+    			</p>
+    	</div>
+
+    </div>
 </div>
+
 
 <!-- <a href="forgotAccount.html"> Forgot Username or Password? </a> -->
 

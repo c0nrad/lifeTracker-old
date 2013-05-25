@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1> Contact Us </h1>
+
+<p> We'd love to head from you! </p>
+
+<address>
+	<strong>LifeTracker</strong><br>
+	1337 Skeet Drive<br>
+	San Francisco, CA 133769<br>
+	<abbr title="Phone">P:</abbr> (123) 456-7890
+</address>
+ 
+<address>
+	<strong>Stuart Larsen</strong><br>
+	<a href="mailto:poptarts4liffe@gmail.com">poptarts4liffe@gmail.com</a>
+</address>
+
+
+<div class="hero-unit">
+
+    <form method="post" action="contactMe.html">
+
+      <fieldset>
+    <legend>Contact Us</legend>
+    
+    Please, if you have anything you'd like to say to us, use the form below. There is no need to include your name / email if you don't want to. We'd just really like to hear you what have to say! Thanks!
+    <br /> <br />
+
+    <label id="id_name" >Name (optional) </label>
+    <input type="text" name="name" placeholder="name">
+
+    <label id="id_email">Email (optional) </label>
+    <input type="text" name="email" placeholder="email">
+
+    <label id="id_message">Contents: </label>
+    <textarea class="span11" rows="8" name="message"></textarea>
+
+   
+    <button type="submit" class="btn">Submit</button>
+    </fieldset>
+    </form>
+    
+  </div>
+
+{% endblock %}

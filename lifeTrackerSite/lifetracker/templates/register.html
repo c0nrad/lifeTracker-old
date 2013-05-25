@@ -1,11 +1,47 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="hero-unit">
-    <form action="register.html" method="post">{% csrf_token %}
-      {{ form.as_p }}
-      <input class="btn" type="submit" value="Submit" />
-    </form>
+
+<div class="row-fluid">
+    <div class="span4">
+		<div class="hero-unit">
+			<form action="/register/" method="post">{% csrf_token %}
+				<fieldset>
+				<legend>Register</legend>
+				<div class="fieldWrapper">
+					{{ form.username.errors }}
+				    <label for="id_username">username:</label>
+				    {{ form.username }}
+				</div>
+
+				<div class="fieldWrapper">
+					{{ form.email.errors }}
+				    <label for="id_email">email:</label>
+				    {{ form.email }}
+				</div>
+
+				<div class="fieldWrapper">
+					{{ form.password.errors }}
+				    <label for="id_password">password:</label>
+				    {{ form.password }}
+				</div>
+
+				<div class="fieldWrapper">
+					{{ form.password1.errors }}
+				    <label for="id_password1">password1:</label>
+				    {{ form.password1 }}
+				</div>
+			   	<input class="btn" type="submit" value="Submit" />
+			</form>
+
+		</div>
+	</div>
+	<div class="span8">
+		<div class="hero-unit">
+			<h3> Welcome to LifeTracker! </h3>
+				
+		</div>
+	</div>
 </div>
 
 {% if errors %}

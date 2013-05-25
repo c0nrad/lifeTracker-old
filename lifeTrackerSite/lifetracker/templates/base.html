@@ -1,106 +1,124 @@
 {% load staticfiles %}
+{% load dajaxice_templatetags %}
 
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>LifeTracker</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="{% static "bootstrap/js/bootstrap.min.js"%}" ></script>
-    <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet" media="screen">
-    <style type="text/css">
-      body {
-          padding-top: 20px;
-          padding-bottom: 40px;
-      }
-      
-      /* Custom container */
-      .container-narrow {
-          margin: 0 auto;
-          max-width: 1000px;
-      }
-      .container-narrow > hr {
-          margin: 30px 0;
-      }
-      
-      /* Main marketing message and sign up button */
-      .jumbotron {
-          margin: 60px 0;
-          text-align: center;
-      }
-      .jumbotron h1 {
-          font-size: 72px;
-          line-height: 1;
-      }
-      .jumbotron .btn {
-          font-size: 21px;
-          padding: 14px 24px;
-      }
-      
-      /* Supporting marketing content */
-      .marketing {
-          margin: 60px 0;
-      }
-      .marketing p + h4 {
-          margin-top: 28px;
-      }
-    </style>
-    
-    {% block extraheaders %}
-    {% endblock %}
-  </head>
-  
-  {% block body%}
-  <body>
-    {% endblock %}
-    <div class="container-narrow">
-      <div class="masthead">
-        
-        {% if user.is_authenticated %}
-        <ul class="nav nav-pills pull-right">
-          <li><a href="home.html">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
-          <li> <div class="btn-group">
+<head>
+  <title>LifeTracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <script src="{% static "bootstrap/js/bootstrap.min.js"%}" ></script>
+  <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet" media="screen">
+  {% dajaxice_js_import %}
+
+  <style type="text/css">
+  body {
+    padding-top: 20px;
+  }
+
+  .container-narrow {
+    max-width: 1000px;
+  }
+  .container-narrow > hr {
+    margin: 30px 0;
+  }
+
+  .jumbotron {
+    margin: 60px 0;
+    text-align: center;
+  }
+  .jumbotron h1 {
+    font-size: 72px;
+    line-height: 1;
+  }
+
+  html,
+  body {
+    height: 100%;
+    /* The html and body elements cannot have any padding or margin. */
+  }
+
+  /* Wrapper for page content to push down footer */
+  #wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -60px;
+  }
+
+  /* Set the fixed height of the footer here */
+  #push,
+  #footer {
+    height: 60px;
+  }
+  #footer {
+    background-color: #f5f5f5;
+  }
+
+  .container {
+    width: auto;
+    max-width: 680px;
+  }
+  .container .credit {
+    margin: 20px 0;
+  }
+
+      </style>
+
+  {% block extraheaders %}
+  {% endblock %}
+</head>
+
+{% block body %}<body>{% endblock %}
+  <div id="wrap" class="container-narrow">
+    <div class="masthead">
+
+      <!-- Toolbar -->
+      {% if user.is_authenticated %}
+      <ul class="nav nav-pills pull-right">
+          <li><a href="/home/">Home</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/contact/">Contact</a></li>
+          <li> 
+            <div class="btn-group">
               <button class="btn"> {{user.username}}</button>
               <button class="btn dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
+               <span class="caret"></span>
               </button>
               <ul class="dropdown-menu">
-                <li><a href="addEvent.html"> Add Event </a> </li>
-                <li><a href="settings.html"> Settings </a></li>
-                <li><a href="analysis.html"> Analysis </a> </li>
-                <li><a href="logout.html"> Logout </a> </li>
-                <!-- dropdown menu links -->
+                <li><a href="addEvent/"> Add Event </a> </li>
+                <li><a href="settings/"> Settings </a></li>
+                <li><a href="analysis/"> Analysis </a> </li>
+                <li><a href="logout/"> Logout </a> </li>
               </ul>
             </div>
           </li>
-          
-        </ul>
-        {% else %}
-        <ul class="nav nav-pills pull-right">
-          <li><a href="/">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
-          <li><a class="btn" href="login.html"> Login </a> </li>
-        </ul>
-        {% endif %}
-        
-        <h3 class="muted"><a href="/" style="text-decoration: none;">LifeTracker</a></h3>
-      </div>
-      
-      <hr>
-      
-      {% block content %}
-      {% endblock %}      
-      
-      
-      <footer>      
-        <div class="footer">
-          <p>&copy; Larsen & Vitullo 2013</p>
-        </div>
-      </footer>      
+      </ul>
+      {% else %}
+      <ul class="nav nav-pills pull-right">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/contact/">Contact</a></li>
+        <li><a class="btn" href="login/"> Login </a> </li>
+      </ul>
+      {% endif %}
+
+      <!-- Logo -->
+      <h3 class="muted"><a href="/" style="text-decoration: none;">LifeTracker</a></h3>
     </div>
-    
-  </body>
+
+    <hr>
+    {% block content %}
+    {% endblock %}          
+  </div>
+
+  <div id="push"></div>
+
+  <div id="footer"> 
+    <div class="container">
+      <p class="muted credit"> LifeTracker &copy; Larsen & Vitullo </p>
+    </div>
+  </div>
+</body>
 </html>

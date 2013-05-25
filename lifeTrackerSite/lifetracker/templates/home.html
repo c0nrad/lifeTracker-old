@@ -1,60 +1,200 @@
 {% extends 'base.html' %}
-
-
+{% load dajaxice_templatetags %}
 {% load static %}
-
 
 {% block extraheaders %}
 <!--Timeline-->
 <script type="text/javascript" src="{% static "timeline/timeline.js"%}"></script>
 <link rel="stylesheet" type="text/css" href="{% static "timeline/timeline.css"%}">
-
+<script src="{% static "moment.js"%}"> </script>
 <script type="text/javascript">
-        var timeline;
-        var data;
+    var timeline;
+    var data;
+    var eventsMap = {};
 
-        // Called when the Visualization API is loaded.
-        function drawVisualization() {
-            // Create a JSON data table
-            data = [
-                {% for event in events %}
-                {
-                    'start': new Date("{{ event.startdatetime.isoformat }}"),
-                    {% if event.enddatetime %}
-                    'end': new Date("{{ event.enddatetime.isoformat }}"),
-                    {% endif %}
-                    'content': '{{event.label}}'
-                },
-                {% endfor %}
+    var options = {
+            'width':  '100%',
+            'height': '300px',
+            'editable': true,   // enable dragging and editing
+            'style': 'box'
+        };
 
-            ];
+    // Called when the Visualization API is loaded.
+    function drawVisualization() {
+        // Create a JSON data table
+        data = [
+            {% for event in events %}
+            {
+                'start': new Date("{{ event.startdatetime.isoformat }}"),
+                {% if event.enddatetime %}
+                'end': new Date("{{ event.enddatetime.isoformat }}"),
+                {% endif %}
+                'content': '{{event.label}} <input class="pk" type="hidden" value="{{event.id}}"/>',
+            },
+            {% endfor %}
+        ];
 
-            // specify options
-            var options = {
-                'width':  '100%',
-                'height': '300px',
-                'editable': true,   // enable dragging and editing events
-                'style': 'box'
-            };
+        // Instantiate our timeline object.
+        timeline = new links.Timeline(document.getElementById('mytimeline'));
 
-            // Instantiate our timeline object.
-            timeline = new links.Timeline(document.getElementById('mytimeline'));
+        function getSelectedRow() {
+            return timeline.getSelection()[0].row;
+        }
 
-            
-            /*
-            function onRangeChanged(properties) {
-                document.getElementById('info').innerHTML += 'rangechanged ' +
-                        properties.start + ' - ' + properties.end + '<br>';
+        function getSelectedItem() {
+            var row = getSelectedRow();
+            return timeline.getItem(row);
+        }
+
+        function onChange() {
+            item = getSelectedItem();
+            Dajaxice.lifetracker.editEvent(defaultCallback, { "item" : item })
+        }
+
+        function onDelete() {
+            console.log("Delete")
+            item = getSelectedItem();
+            Dajaxice.lifetracker.deleteEvent(defaultCallback, { "item" : item })
+        }
+
+        function onAdd() {
+            console.log("onAdd");
+            item = getSelectedItem();
+            item.content = prompt("Enter Label", "");
+            if (item.content == undefined || item.content == null || item.content === "") {
+                timeline.cancelAdd(); 
+                timeline.redraw();
+                return;
             }
 
-            // attach an event listener using the links events handler
-            links.events.addListener(timeline, 'rangechanged', onRangeChanged);
-            */
+            timeline.changeItem(getSelectedRow(), item);
 
-            // Draw our timeline with the created data and options
-            timeline.draw(data, options);
+            console.log(item);
+
+            Dajaxice.lifetracker.addEvent(addCallback, { "row": getSelectedRow(), "item": item});
+            //timeline.redraw();
         }
-    </script>
+
+        function onEdit() {
+            item = getSelectedItem();
+            
+            var cleanContent = item.content.split("<input")[0]
+            var pk = (/value="(\d+)"/gi.exec(item.content))[1];
+
+            $('#id_key').val(pk);
+            $('#id_label').val(cleanContent);
+            $('#id_startdatetime').val(item.start);
+            $('#id_enddatetime').val(item.end);
+            $('#id_description').val(eventsMap[pk].fields.description);
+            $('#myModal').modal('toggle')
+        }
+
+        // attach an event listener using the links events handler
+        links.events.addListener(timeline, 'edit', onEdit);
+        links.events.addListener(timeline, 'change', onChange);
+        links.events.addListener(timeline, 'delete', onDelete);
+        links.events.addListener(timeline, 'add', onAdd);
+
+        // Draw our timeline with the created data and options
+        timeline.draw(data, options);
+    }
+
+    function findUntagedEvent() {
+        events = timeline.getData();
+        for (var i = 0; i < events.length; ++i) {
+            if (events[i].content.indexOf("<input") == -1) {
+                console.log(events[i]);
+                return events[i]  
+            }
+        }
+    }
+
+    function addCallback(inData) {
+        console.log("addCallback");
+        console.log("Untagged event: ", findUntagedEvent())
+        item = findUntagedEvent()
+        item.content = item.content + ' <input class="pk" type="hidden" value="' + inData.pk + '"/>'
+
+        console.log("changeItem: ", inData.row, item)
+        timeline.changeItem(inData.row, item);
+        timeline.redraw();
+    }
+
+    function defaultCallback(data){
+        updateTable(data.events);
+        updateTimeline(data.events);
+        updateEventMap(data.events);
+    }
+
+    function updateEventMap(events){
+        events = JSON.parse(events);
+
+        for (var i = 0; i < events.length; ++i) {
+            eventsMap[events[i].pk] = events[i];
+        }
+        console.log(eventsMap)
+    }
+
+
+    function dateToString(date) {
+        return moment(date).format('MMM D, YYYY, h:mm a')
+    }
+
+    function stringToDate(dateStr) {
+        if (moment(dateStr).isValid()) {
+            return moment(dateStr).toDate();
+        } else if (moment(dateStr, 'MMM D, YYYY, h:mm a').isValid()) {
+            return moment(dateStr, 'MMM D, YYYY, h:mm a').toDate();
+        } else if (moment(dateStr, 'MM-DD-YYYY hh:mm:ss A').isValid()) {
+            return moment(dateStr, 'MM-DD-YYYY hh:mm:ss A').toDate()
+        } else {
+            console.error("Can't parse string", dateStr);
+        }
+    }
+
+    newData = []
+    function updateTimeline(events) {
+        newData.length = 0
+        
+        events = JSON.parse(events)
+        events.forEach(addTimelineEvent)
+        
+        timeline.setData(newData);
+        timeline.redraw();
+
+    }
+
+    function addTimelineEvent(event) {
+        newData.push( { 'start': new Date(event.fields.startdatetime) ,
+                     'content': event.fields.label + ' <input class="pk" type="hidden" value="' + event.pk + '">',
+                     'end': ((event.fields.enddatetime == null) ? "" : new Date(event.fields.enddatetime))
+        })
+    }
+
+    function updateTable(events) {
+            $('#eventTable > tbody').empty()
+            events = JSON.parse(events)
+            events.forEach(addTableRow)
+            connectTableClick();
+    }
+
+    function addTableRow(event) {
+        $('#eventTable tbody').append(' \
+            <tr> \
+                <td> ' + event.pk + '</td> \
+                <td>' + event.fields.label + '</td> \
+                <td> ' + dateToString(event.fields.startdatetime) + '</td> \
+                <td> ' + ((event.fields.enddatetime == null) ? "None" : dateToString(event.fields.enddatetime)) + '</td> \
+                <td> ' + ((event.fields.description == null) ? "None" : event.fields.description) + '</td> \
+                <td> <a href="editEvent/' + event.pk + '\" class=\"btn\"> Edit </a> <a href="deleteEvent/' + event.pk + '\" class="btn"> Delete </a> </td> \
+            </tr>');      
+    }
+</script>
+{% dajaxice_js_import %}
+<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" media="screen"
+      href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">
+
 {% endblock %}
 
 {% block body %}
@@ -63,10 +203,8 @@
 
 {% block content %}
 
-<a class="btn" href="addEvent.html"> Add Event </a>
-<a class="btn" href="analysis.html"> Analysis </a>
-<a class="btn" href="timeline.html"> Timeline </a>
-
+<a class="btn" href="/addEvent/"> Add Event </a>
+<a class="btn" href="/analysis/"> Analysis </a>
 
 <h3> Timeline </h3>
 
@@ -74,7 +212,8 @@
 
 <br /> <br />
 <h3> Events </h3>
-<table class="table table-hover table-striped">
+<table id="eventTable" class="table table-hover table-striped">
+    <thead>
   <tr>
     <th>I.D</th>
     <th>Label</th>
@@ -83,17 +222,145 @@
     <th>Description</th>
     <th>Actions</th>
   </tr>
-  {% for event in events %}
-  <tr>
-    <td>{{event.id}}</td>
-    <td>{{event.label}}</td>
-    <td>{{event.startdatetime}}</td>
-    <td>{{event.enddatetime}}</td>
-    <td>{{event.description}}</td>
-    <td> <a href="editEvent/{{event.id}}" class="btn"> Edit </a> <a href="deleteEvent/{{event.id}}" class="btn"> Delete </a> <td>
-  </tr>
-  {% endfor %}
-</table> 
+    </thead>
+    <tbody>
+  
+    </tbody>    
+</table>
 
+
+<script type="text/javascript">
+
+
+function connectTableClick() {
+    $('#eventTable > tbody > tr').dblclick(function(event){
+        var pk = $(this).find('td').eq(0).text();
+        var label = $(this).find('td').eq(1).text();
+        var startdatetime = $(this).find('td').eq(2).text();
+        var enddatetime = $(this).find('td').eq(3).text();
+        var description = $(this).find('td').eq(4).text();
+        console.log("Pk:", pk, " label:", label, " start:", startdatetime, " end:", enddatetime, " description: ", description);
+
+        $('#id_key').val(pk);
+        $('#id_label').val(label);
+        $('#id_startdatetime').val(startdatetime);
+        $('#id_enddatetime').val(enddatetime);
+        $('#id_description').val(description); 
+        $('#myModal').modal('toggle')
+    });
+};
+
+function submitModal() {
+    var key = $('#id_key').val();
+    var label = $('#id_label').val();
+    var startdatetime = $('#id_startdatetime').val();
+    var enddatetime = $('#id_enddatetime').val();
+    var description = $('#id_description').val();
+
+    console.log("Pk:", key, " label:", label, " start:", startdatetime, " end:", enddatetime, " description: ", description);
+
+
+    item = Object();
+    item.key = key;
+    item.content = label;
+    
+    console.log("submitModal:", item);
+    item.start = stringToDate(startdatetime).toISOString();
+    item.end = stringToDate(enddatetime).toISOString();
+    item.description = description;
+    console.log("submitModal:", item)
+    Dajaxice.lifetracker.editEvent(defaultCallback, { "item" : item })
+}
+
+$(document).ready(function() {
+    Dajaxice.lifetracker.sayhello(defaultCallback);
+});
+</script>
+
+<button class="btn" onclick="Dajaxice.lifetracker.sayhello(defaultCallback);"> Refresh </button>
+
+<!-- Button to trigger modal -->
+<a href="#myModal" role="button" class="btn" data-toggle="modal">Edit Shiat</a>
+ 
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Edit Event</h3>
+    </div>
+    <div class="modal-body">
+        
+{% csrf_token %}
+
+<input type='hidden' id='id_key' value='' />
+
+  <div class="fieldWrapper">
+    {{ form.label.errors }}
+    <label for="id_label"> Label: </label>
+    {{ form.label }}
+  </div>
+
+  <div id="startdatetimepicker" class="input-append" >
+    <label for="id_startdatetime"> Start Datetime: </label>
+    {{ form.startdatetime }}
+    <span class="add-on">
+      <i data-time-icon="icon-time" data-date-icon="icon-calendar"> </i>
+    </span>
+  </div>
+
+  <div id="enddatetimepicker" class="input-append" >
+    <label for="id_enddatetime"> End Datetime: </label>
+    {{ form.enddatetime }}
+    <span class="add-on">
+      <i data-time-icon="icon-time" data-date-icon="icon-calendar"> </i>
+    </span>
+  </div>
+
+  <div class="fieldWrapper">
+    {{ form.description.errors }}
+    <label for="id_description"> Description: </label>
+    {{ form.description }}
+  </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn btn-primary" data-dismiss="modal" onclick="submitModal()"/> Submit </button>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+</script> 
+
+<script type="text/javascript"
+        src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js">
+</script>
+<script type="text/javascript"
+        src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">
+</script>
+
+<script type="text/javascript"
+        src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js">
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+  
+     $(function() {
+        $('#startdatetimepicker').datetimepicker({
+           language: 'en',
+           pick12HourFormat: true
+        });
+        $('#enddatetimepicker').datetimepicker({
+           language: 'en',
+           pick12HourFormat: true
+        });
+     });
+
+    var dataSource = {{labels|safe}}
+    $('#id_label').typeahead({source: dataSource}).attr('autocomplete', 'off');
+});
+</script>
 
 {% endblock %}

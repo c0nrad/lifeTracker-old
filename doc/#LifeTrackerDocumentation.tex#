@@ -153,7 +153,7 @@ On this page there will be graphs and charts showing relationships between the v
 
 \subsubsection{Notes}
 
-I think once everything is set up, this'll be the hardest part. This NEEDs to be well thought out and as modular as possible. I think it'd be cool if`
+I think once everything is set up, this'll be the hardest part. This NEEDs to be well thought out and as modular as possible.
 
 \section{Technical Specifications}
 
@@ -205,5 +205,25 @@ Mood:
 \end{verbatim}
 
 So users can see how events in their life effects thier mood. There will be a rating scale from 0-10 on how ``happy'' they are. They can either submit a numebr from 0-10 or, say there was an increase of happiness from when they last said they were happy.
+
+\section{Accounts}
+
+\subsection{Email}
+
+Username: lifetrackersite@gmail.com
+Password g3tb3nt69
+
+\subsection{GoDaddy}
+
+lifetracker.us
+lifetracker.com (backorder)
+
+lifetracker
+G3tb3nt69
+
+\subsection{AWS}
+
+lifetracker
+g3tb3nt69
 
 \end{document}

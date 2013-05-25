@@ -1,12 +1,69 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
+
+      <div id="myCarousel" class="carousel slide">
+    <ol class="carousel-indicators">
+    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+    <li data-target="#myCarousel" data-slide-to="1"></li>
+    <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+    <!-- Carousel items -->
+    <div class="carousel-inner">
+      <div class="active item"> 
       <!-- Jumbotron -->
       <div class="jumbotron">
         <h1>Take Control of Your Life</h1>
-        <p class="lead"> Do you ever wonder where your time goes? Do you ever wonder which events in your life contribute most to your happiness. Or maybe what events make you less than happy. LifeTracker can help with that.</p>
-        <a class="btn btn-large btn-success" href="register.html">Create An Account</a>
+        <p class="lead"> You're given one thing in life. Make sure every second counts. </p>
+        <a class="btn btn-large btn-success" href="register/">Create An Account</a>
       </div>
+      </div>
+
+    <div class="item"> 
+      <div class="jumbotron">
+        <img style="float:right;" src="{% static "media/steveChart.png" %}"/>
+        <h1> Bitches Love Graphs!</h1>
+        <p class="lead"> You're given one thing in life. Make sure every second counts. </p>
+        <a class="btn btn-large btn-success" href="register/">Create An Account</a>
+      </div>
+  </div>
+    <div class="item">
+
+    <!-- Jumbotron -->
+      <div class="jumbotron">
+        <h1>Get Bent!</h1>
+            <br />
+    <blockquote>
+    <p>I just love LifeTracker, I used it for everything! </p>
+    <small>c0nrad <cite title="Source Title">-c0nradsc0rner</cite></small>
+    </blockquote>
+    <br />
+    <blockquote class="pull-right">
+    <p>Why did you just mace me? </p>
+    <small>Random Guy <cite title="Source Title">-Street</cite></small>
+    </blockquote>
+
+     <blockquote class="pull-left">
+    <p>Why did you just mace me? </p>
+    <small>Random Guy <cite title="Source Title">-Street</cite></small>
+    </blockquote>
+    
+    <blockquote>
+    <p> What would optimus prime do? </p>
+    <small> Aristotle <cite title="Source Title">-The Republic</cite></small>
+    </blockquote>
+    <br />
+
+        <a class="btn btn-large btn-success" href="register/">Create An Account</a>
+
+      </div>
+</div>
+    </div>
+    <!-- Carousel nav -->
+    <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+    <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div>
 
       <hr>
 
@@ -14,18 +71,18 @@
       <div class="row-fluid">
         <div class="span4">
           <h2>Record</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
+          <p> Each event in your life should be done with purpose and for a reason.</p>
+          <p><a class="btn" href="/about/">View details &raquo;</a></p>
         </div>
         <div class="span4">
           <h2>Understand</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
+          <p> Understand what events happen in your life, and why they happen. </p>
+          <p><a class="btn" href="/about/">View details &raquo;</a></p>
        </div>
         <div class="span4">
-          <h2>Live Freely</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, penis in my butt, tortor mauris condimentum nibh, ut fermentum massa.</p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
+          <h2> Analyze </h2>
+          <p> Using our free tools, analyze these events to learn more about where your one life is going. </p>
+          <p><a class="btn" href="/about/">View details &raquo;</a></p>
         </div>
       </div>
 

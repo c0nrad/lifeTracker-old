@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="hero-unit">
+	<h2> LifeTracker </h2>
+
+	<img style="float:right;" src="{% static "media/logo.png" %}" alt="logo"/>
+
+	LifeTracker is an application to help you better understand all the events in your life.
+
+	<br /> <br />
+
+	On average, how much time do you spend exercising per day? How much of your time is spent sleeping? How much of your time do you spend doing things that don't matter?
+
+	<br /> <br />
+
+	LifeTracker was specifically designed to help solve these problems. 
+
+	<br /> <br />
+</div>
+
+<div class="hero-unit">
+
+	<h3> College Student Mike </h3>
+
+	<img style="float:left;" src="{% static "media/mikeChart.png" %}"/>
+
+	Mike is an average college student. He is cool with the guys, and generally gets good grades. But recently, his grades have been slipping a little bit. What happened?
+
+	<br /> <br />
+
+	Mike creates an account at LifeTracker, and after a few weeks of reccording events, he finds out what his problem was:
+
+	<br /> <br />
+
+	He spends 20% of his time hanging out with friends and 15% of his time at parties. Tisk tisk Mike.
+</div>
+
+<div class="hero-unit">
+	<h3> Sad Day Steve </h3>
+
+	<img style="float:right;" src="{% static "media/steveChart.png" %}"/>
+
+	Steve has been very sad lately. He thinks it's because of his sleep schedule, but he's not really sure.
+
+	<br /> <br />
+
+	So Steve creates an account at LifeTracker. He records the time he goes to bed each night, and the time he wakes up each morning. And everyday he reccords his mood.
+
+	<br /> <br />
+
+	After a few weeks of reccording, he discovers the following relationship:
+
+	<br /> <br />
+
+	Steve now knows that he is on average in the best mood when he sleeps 8ish hours. It’s also
+interesting to note that he feels a lot better after 3 hours of sleep compared to 4 hours of
+sleep.
+
+<br /> <br />
+
+	Steve can sleep peacefully again.
+</div>
+{% endblock %}
