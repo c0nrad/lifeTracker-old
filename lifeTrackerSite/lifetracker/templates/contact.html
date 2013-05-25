@@ -21,23 +21,33 @@
 
 <div class="hero-unit">
 
-    <form method="post" action="contactMe.html">
+    <form method="post" action="/contact/"> {% csrf_token %}
+        {{ form.non_fields_errors }}
 
-      <fieldset>
-    <legend>Contact Us</legend>
+
+        <fieldset>
+        <legend>Contact Us</legend>
     
-    Please, if you have anything you'd like to say to us, use the form below. There is no need to include your name / email if you don't want to. We'd just really like to hear you what have to say! Thanks!
-    <br /> <br />
+        Please, if you have anything you'd like to say to us, use the form below. There is no need to include your name / email if you don't want to. We'd just really like to hear you what have to say! Thanks!
+        <br /> <br />
 
-    <label id="id_name" >Name (optional) </label>
-    <input type="text" name="name" placeholder="name">
+        <div class="fieldWrapper">
+            {{ form.name.errors }}
+            <label id="id_name" >Name</label>
+            <input type="text" name="name" placeholder="name">
+        </div> 
 
-    <label id="id_email">Email (optional) </label>
-    <input type="text" name="email" placeholder="email">
+        <div class="fieldWrapper">
+            {{ form.email.errors }}
+            <label id="id_email">Email</label>
+            <input type="text" name="email" placeholder="email" type="email">
+        </div>
 
-    <label id="id_message">Contents: </label>
-    <textarea class="span11" rows="8" name="message"></textarea>
-
+        <div class="fieldWrapper">
+            {{ form.message.errors}}
+            <label id="id_message">Contents: </label>
+            <textarea class="span11" rows="8" name="message"></textarea>
+        </div>
    
     <button type="submit" class="btn">Submit</button>
     </fieldset>

@@ -7,8 +7,9 @@ from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from lifetracker.models import Event
-from lifetracker.forms import RegistrationForm, LoginForm, EventForm, ForgotAccountForm
+from lifetracker.forms import ContactForm, RegistrationForm, LoginForm, EventForm, ForgotAccountForm
 from analysis import ratioOfLabelUsage, labelList
+from django.core.mail import send_mail
 
 
 def index(request):
@@ -20,7 +21,20 @@ def about(request):
 
 
 def contact(request):
-    return render_to_response('contact.html', {}, context_instance=RequestContext(request))
+    form = ContactForm(request.POST)
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name'] or "Anonymous"
+            email = form.cleaned_data['email'] or "Anonymous"
+            message = "\nName: " + name + "\nEmail: " + email + "\n" + form.cleaned_data['message']
+
+            send_mail('lifetracker: Contact!', message, "lifetrackersite@gmail.com",
+                  ['poptarts4liffe@gmail.com', 'lifetrackersite@gmail.com'], fail_silently= False)
+            return HttpResponseRedirect('/')
+    return render_to_response('contact.html', {
+        'form': form,
+    }, context_instance=RequestContext(request))
 
 
 @csrf_protect
@@ -44,7 +58,6 @@ def login(request):
     }, context_instance=RequestContext(request))
 
 
-
 @login_required
 def logout(request):
     auth_logout(request)
@@ -59,6 +72,7 @@ def home(request):
         'user': request.user,
         'form': EventForm(),
         'labels': labelList(request),
+        'firstTime': True,
     }, context_instance=RequestContext(request))
 
 
@@ -175,7 +189,7 @@ def editEvent(request, eventID):
     if form.is_valid():
         form.save()
         return HttpResponseRedirect('/home.html')
-        
+    
     return render_to_response('editEvent.html', {
         'form' : form,
         'labels': labelList(request),

@@ -186,15 +186,14 @@
                 <td> ' + dateToString(event.fields.startdatetime) + '</td> \
                 <td> ' + ((event.fields.enddatetime == null) ? "None" : dateToString(event.fields.enddatetime)) + '</td> \
                 <td> ' + ((event.fields.description == null) ? "None" : event.fields.description) + '</td> \
-                <td> <a href="editEvent/' + event.pk + '\" class=\"btn\"> Edit </a> <a href="deleteEvent/' + event.pk + '\" class="btn"> Delete </a> </td> \
+                <td> <a href="/editEvent/' + event.pk + '\" class=\"btn\"> Edit </a> <a href="/deleteEvent/' + event.pk + '\" class="btn"> Delete </a> </td> \
             </tr>');      
     }
 </script>
 {% dajaxice_js_import %}
-<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+
 <link rel="stylesheet" type="text/css" media="screen"
       href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">
-
 {% endblock %}
 
 {% block body %}
@@ -203,12 +202,32 @@
 
 {% block content %}
 
-<a class="btn" href="/addEvent/"> Add Event </a>
-<a class="btn" href="/analysis/"> Analysis </a>
+{% if firstTime %}
+<div class="alert alert-info alert-block">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h3>Welcome to LifeTracker!</h3>
+    Here's a little guide to get you started:
+    <ul>
+        <li> <strong> How Lifetracker Works </strong>
+            <p> &nbsp; &nbsp; &nbsp; First off, you need to start recording events that happen in your life. Once there are enough events, life tracker can do analysis to determine patterns in your life. </p>
+        </li>
+        <li> <strong> Adding An Event </strong> 
+            <p> &nbsp; &nbsp; &nbsp; Double click anywhere on the timeline, a popup should ask for the label name. <strong> Labels </strong> are how LifeTracker groups events of the same type, such as <i> Sleeping </i>, <i> Studying </i>, or <i> Jogging </i>. </p>
+        </li>
+        <li> <strong> Editing An Event </strong>
+            <p> &nbsp; &nbsp; &nbsp; Double click on the event in the timeline, or double click on any row in the Event Table below. Click <i> Submit Changes </i> when you complete.
+            </p>
+        </li>
+    </ul>
+    </div>
+{% endif %} 
 
 <h3> Timeline </h3>
 
 <div id="mytimeline"></div>
+
+<a class="btn" href="/addEvent/"> Add Event </a>
+<a class="btn" href="/analysis/"> Analysis </a>
 
 <br /> <br />
 <h3> Events </h3>
@@ -230,7 +249,6 @@
 
 
 <script type="text/javascript">
-
 
 function connectTableClick() {
     $('#eventTable > tbody > tr').dblclick(function(event){
@@ -259,7 +277,6 @@ function submitModal() {
 
     console.log("Pk:", key, " label:", label, " start:", startdatetime, " end:", enddatetime, " description: ", description);
 
-
     item = Object();
     item.key = key;
     item.content = label;
@@ -278,9 +295,6 @@ $(document).ready(function() {
 </script>
 
 <button class="btn" onclick="Dajaxice.lifetracker.sayhello(defaultCallback);"> Refresh </button>
-
-<!-- Button to trigger modal -->
-<a href="#myModal" role="button" class="btn" data-toggle="modal">Edit Shiat</a>
  
 <!-- Modal -->
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -329,13 +343,7 @@ $(document).ready(function() {
     </div>
 </div>
 
-<script type="text/javascript"
-        src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
-</script> 
 
-<script type="text/javascript"
-        src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js">
-</script>
 <script type="text/javascript"
         src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">
 </script>
@@ -350,11 +358,13 @@ $(document).ready(function() {
      $(function() {
         $('#startdatetimepicker').datetimepicker({
            language: 'en',
-           pick12HourFormat: true
+           pick12HourFormat: true,
+           pickSeconds: false,      
         });
         $('#enddatetimepicker').datetimepicker({
-           language: 'en',
-           pick12HourFormat: true
+            language: 'en',
+            pick12HourFormat: true,
+            pickSeconds: false,
         });
      });
 

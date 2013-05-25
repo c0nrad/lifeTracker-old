@@ -5,6 +5,7 @@
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
+
 {% for chart in charts %}
 {% include "chart.html" with chart=chart%}
 {% endfor %}
@@ -16,11 +17,24 @@
 
 <h3> Analysis </h3>
 
-  <!--Div that will hold the pie chart-->
+<div class="well">	
+	Number of Events: 
+	<br />
+	Average Duraction of Events:
+</div>
+
+<style>
+.chartBox {
+  display: inline-block;
+  width: 400px;
+  height: 400px;
+  margin: 3em;
+}
+</style>
 
 
 {% for chart in charts %}
-<div id="{{chart.id}}" style="float:left;"></div>
+<div id="{{chart.id}}" class="chartBox"></div>
 {% endfor %}
 
 

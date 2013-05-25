@@ -19,9 +19,8 @@ class RegistrationForm(forms.Form):
     
 class LoginForm(forms.Form):
     username = forms.CharField(required=True, initial="username")
-    password = forms.CharField(widget=forms.PasswordInput(), initial="password")
+    password = forms.CharField(widget=forms.PasswordInput(), initial="password")    
 
-    
 class EventForm(forms.ModelForm):
     input_formats = ['%Y-%m-%d %H:%M:%S',    # '2006-10-25 14:30:59'
      '%Y-%m-%d %H:%M',        # '2006-10-25 14:30'
@@ -43,3 +42,9 @@ class EventForm(forms.ModelForm):
 
 class ForgotAccountForm(forms.Form):
     email = forms.EmailField(required=True)
+
+
+class ContactForm(forms.Form):
+    name = forms.CharField(required=False);
+    email = forms.EmailField(required=False);
+    message = forms.CharField(required=True);    

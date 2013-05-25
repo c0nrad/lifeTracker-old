@@ -32,6 +32,12 @@ AUTH_PROFILE_MODULE = "lifetracker.UserProfile"
 LOGIN_URL="/login/"
 DAJAXICE_MEDIA_PREFIX="dajaxice"
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'lifetrackersite@gmail.com'
+EMAIL_HOST_PASSWORD = 'g3tb3nt69'
+
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
