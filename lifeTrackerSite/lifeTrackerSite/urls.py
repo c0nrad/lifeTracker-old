@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^forgotAccount/$', 'lifetracker.views.forgotAccount', name="forgotAccount"),
     url(r'^deleteEvent/(\d+)', 'lifetracker.views.deleteEvent', name='deleteEvent'),
     url(r'^editEvent/(\d+)', 'lifetracker.views.editEvent', name='editEvent'),
+    url(r'^checkUsername/', 'lifetracker.views.isUsernameAvailable', name='isUsernameAvailable'),
 
     # url(r'^lifeTrackerSite/', include('lifeTrackerSite.foo.urls')),
 

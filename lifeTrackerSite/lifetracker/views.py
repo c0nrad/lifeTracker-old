@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render_to_response, get_object_or_404
@@ -10,6 +10,7 @@ from lifetracker.models import Event
 from lifetracker.forms import ContactForm, RegistrationForm, LoginForm, EventForm, ForgotAccountForm
 from analysis import ratioOfLabelUsage, labelList
 from django.core.mail import send_mail
+from debug import *
 
 
 def index(request):
@@ -36,6 +37,18 @@ def contact(request):
         'form': form,
     }, context_instance=RequestContext(request))
 
+def isUsernameAvailable(request):
+    response_str = "false"
+
+    print "isUsernameAvailable", request
+    if request.is_ajax():
+        username = request.GET.get("username")
+        print "username:", username
+        if User.objects.filter(username=str(username)).count() >= 1:
+            response_str = "false"
+        else:
+            response_str = "true"
+    return HttpResponse("%s" % response_str)
 
 @csrf_protect
 def login(request):
@@ -87,13 +100,15 @@ def register(request):
     form = RegistrationForm()
     if request.method == "POST":
         form = RegistrationForm(request.POST)
+
         if form.is_valid():
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
 
-            if User.objects.filter(username=username).count():
+            if User.objects.filter(username=username).count() >= 1:
                 errors.append("ERROR_USERNAME_TAKEN")
+                errorMessage("username taken: ", username)
                 return render_to_response('register.html', {
                     'errors': errors,
                     'form': form,
@@ -105,12 +120,12 @@ def register(request):
             if user is not None:
                 if user.is_active:
                     auth_login(request, user)
-                    return HttpResponseRedirect('home.html')
+                    return HttpResponseRedirect('/home/')
                 else:
-                    return HttpResponseRedirect('disabledAccount.html')
+                    return HttpResponseRedirect('/disabledAccount.html')
             else:
                 # XXX: Error
-                print "[-] Something went wrong, user was created, but now it can't be found?"
+                errorMessage('Something went wrong, user was created, but now it can\'t be found')
                 print username, request
     return render_to_response('register.html', {
         'errors': errors,
@@ -133,7 +148,7 @@ def addEvent(request):
 
             # Tie event to user
             request.user.profile.events.add(event)
-            return HttpResponseRedirect('home.html')
+            return HttpResponseRedirect('/home/')
         print form.errors
     form = EventForm()
     return render_to_response('addEvent.html', {
@@ -188,7 +203,7 @@ def editEvent(request, eventID):
     form = EventForm(request.POST or None, instance=instance)
     if form.is_valid():
         form.save()
-        return HttpResponseRedirect('/home.html')
+        return HttpResponseRedirect('/home/')
     
     return render_to_response('editEvent.html', {
         'form' : form,
