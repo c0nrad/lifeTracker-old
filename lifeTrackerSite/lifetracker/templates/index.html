@@ -3,7 +3,20 @@
 
 {% block content %}
 
-      <div id="myCarousel" class="carousel slide">
+<style>
+    .jumbotron {
+    margin: 60px 0;
+    text-align: center;
+  }
+  .jumbotron h1 {
+    font-size: 72px;
+    line-height: 1;
+  }
+  </style>
+
+  <div id="wrap" class="container-narrow">
+
+    <div id="myCarousel" class="carousel slide">
     <ol class="carousel-indicators">
     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
     <li data-target="#myCarousel" data-slide-to="1"></li>
@@ -65,28 +78,128 @@
     <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
     </div>
 
+
       <hr>
+
+
+      <style>
+        .descript-box {
+          border-radius: 5px 5px 5px 5px;
+          box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+          padding: 20px;
+          background-color: rgb(250,250,250);
+          border: 1px solid rgb(179, 179, 179);
+          color:black; 
+          text-decoration:none;
+          cursor:pointer
+        }
+
+        .descript-box > img {
+          display: block; 
+          margin-left:auto; 
+          margin-right:auto;
+        }
+
+        .descript-box > h2 {
+          text-align: center;
+        }
+
+        .descript-box:hover { 
+          box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.25);
+          color:black; 
+          text-decoration:none;
+          cursor:pointer
+        }
+
+        .descript-box:active {
+          color:black; 
+          text-decoration:none;
+          cursor:pointer
+        }
+      </style>
 
       <!-- Example row of columns -->
       <div class="row-fluid">
-        <div class="span4">
+        <a class="span4 descript-box" href="/about/">
           <h2>Record</h2>
+          <img class="img-circle" src="{% static "media/img.png" %}">
+          <br />
           <p> Each event in your life should be done with purpose and for a reason.</p>
-          <p><a class="btn" href="/about/">View details &raquo;</a></p>
-        </div>
-        <div class="span4">
+          <p><div class="btn"> View details &raquo;</div></p>
+        </a>
+        <a class="span4 descript-box" href="/about/">
           <h2>Understand</h2>
+          <img class="img-circle" src="{% static "media/img.png" %}">
+          <br />
           <p> Understand what events happen in your life, and why they happen. </p>
-          <p><a class="btn" href="/about/">View details &raquo;</a></p>
-       </div>
-        <div class="span4">
+          <p><div class="btn"> View details &raquo;</div></p>
+        </a>
+        <a class="span4 descript-box" href="/about/">
           <h2> Analyze </h2>
-          <p> Using our free tools, analyze these events to learn more about where your one life is going. </p>
-          <p><a class="btn" href="/about/">View details &raquo;</a></p>
-        </div>
+          <img class="img-circle" src="{% static "media/img.png" %}">
+          <br />
+          <p> Analyze these events to learn more about where your one life is going. </p>
+          <p><div class="btn"> View details &raquo;</div></p>
+        </a>
+      </div>
+    </div> <!-- end container narrow -->
+
+      <!-- START THE FEATURETTES -->
+
+  <style >
+   .featurette-divider {
+      margin: 80px 0; /* Space out the Bootstrap <hr> more */
+    }
+    .featurette {
+      padding-top: 120px; /* Vertically center images part 1: add padding above and below text. */
+      overflow: hidden; /* Vertically center images part 2: clear their floats. */
+    }
+    .featurette-image {
+      margin-top: -120px; /* Vertically center images part 3: negative margin up the image the same amount of the padding to center it. */
+    }
+
+    /* Give some space on the sides of the floated elements so text doesn't run right into it. */
+    .featurette-image.pull-left {
+      margin-right: 40px;
+    }
+    .featurette-image.pull-right {
+      margin-left: 40px;
+    }
+
+    /* Thin out the marketing headings */
+    .featurette-heading {
+      font-size: 50px;
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+    </style>
+
+      <hr class="featurette-divider">
+
+      <div class="featurette">
+        <img class="featurette-image pull-right" src="{% static "media/browser-icon-chrome.png" %}">
+        <h2 class="featurette-heading">First Lifetracker feature. <span class="muted">It'll blow your mind.</span></h2>
+        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
       </div>
 
-      <hr>
+      <hr class="featurette-divider">
+
+      <div class="featurette">
+        <img class="featurette-image pull-left" src="{% static "media/browser-icon-firefox.png" %}">
+        <h2 class="featurette-heading">Oh yeah, LifeTracker's that good. <span class="muted">See for yourself.</span></h2>
+        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="featurette">
+        <img class="featurette-image pull-right" src="{% static "media/browser-icon-safari.png" %}">
+        <h2 class="featurette-heading">And lastly, this one. <span class="muted">Checkmate.</span></h2>
+        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+      </div>
+
+      <hr class="featurette-divider">
 
 {% endblock %}
 
