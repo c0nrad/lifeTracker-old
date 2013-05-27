@@ -1,42 +1,126 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block extraheaders %}
+
+<script src="{% static "jquery.validate.min.js"%}" ></script>
+<script src="{% static "jquery.validate.js"%}" ></script>
+
+<style>
+		label.valid {
+		  width: 24px;
+		  height: 24px;
+		  background: url({% static "media/valid.png" %}) center center no-repeat;
+		  display: inline-block;
+		  text-indent: -9999px;
+		}
+		label.error {
+			font-weight: bold;
+			color: red;
+			padding: 2px 8px;
+			margin-top: 2px;
+		}
+</style>
+
+<script>
+$(document).ready(function(){
+		$('#register-form').validate({
+	    rules: {
+	      username: {
+	        required: true,
+	        remote: {
+                url: "/checkUsername/",
+                type: "get",
+                async: 'false',
+                data: {
+                    username: function()
+                    {
+                        return $("#id_username").val();
+                    }
+                },
+                message: "Username taken!"
+            }
+	      },
+	      email: {
+	        required: true,
+	        email: true
+	      },
+	      password: {
+	      	minlength: 5,
+	        required: true
+	      },
+	      password1: {
+	        minlength: 5,
+	        required: true,
+	        equalTo: '#id_password'
+	      }
+	    },
+	    messages: {
+            username: {
+            	remote: "Username already exist"            		
+            }
+        },
+			highlight: function(element) {
+				$(element).closest('.control-group').removeClass('success').addClass('error');
+			},
+			success: function(element) {
+				element
+				.text('OK!').addClass('valid')
+				.closest('.control-group').removeClass('error').addClass('success');
+			}
+	  });
+}); 
+</script>
+{% endblock %}
+
 
 {% block content %}
 
 <div class="row-fluid">
-    <div class="span4">
+    <div class="span5">
 		<div class="hero-unit">
-			<form action="/register/" method="post">{% csrf_token %}
-				<fieldset>
+			<form id="register-form" action="/register/" method="post">
+				{% csrf_token %}
 				<legend>Register</legend>
-				<div class="fieldWrapper">
-					{{ form.username.errors }}
-				    <label for="id_username">username:</label>
-				    {{ form.username }}
+
+				<div class="control-group">
+				    <label for="id_username" class="control-label">Username</label>
+				    <div class="controls">
+				    	<input id="id_username" name="username" minlength="3" type="text" placeholder="Username" required>
+				    	<p class="help-block"></p>
+					</div>
 				</div>
 
-				<div class="fieldWrapper">
-					{{ form.email.errors }}
-				    <label for="id_email">email:</label>
-				    {{ form.email }}
+				<div class="control-group">
+				    <label for="id_email" class="control-label">Email</label>
+				    <div class="controls">
+						<input id="id_email" name="email" autocomplete="off" type="email" placeholder="Email" required>
+						<p class="help-block"> </p>
+					</div>
 				</div>
 
-				<div class="fieldWrapper">
-					{{ form.password.errors }}
-				    <label for="id_password">password:</label>
-				    {{ form.password }}
+				<div class="control-group">
+				    <label for="id_password" class="control-label">Password</label>
+   				    <div class="controls">
+				    	<input id="id_password" name="password" autocomplete="off" type="password" placeholder="Password" required>
+						<p class="help-block"> </p>
+					</div>
 				</div>
 
-				<div class="fieldWrapper">
-					{{ form.password1.errors }}
-				    <label for="id_password1">password1:</label>
-				    {{ form.password1 }}
+				<div class="control-group">
+				    <label for="id_password1" class="control-label">Retype Password</label>
+				    <div class="controls">
+					    <input id="id_password1" name="password1" type="password" placeholder="Retype Password" data-validation-match-match="password" />
+						<p class="help-block"> </p>
+					</div>
 				</div>
-			   	<input class="btn" type="submit" value="Submit" />
+
+			   	<button class="btn" type="submit" value="Submit">Submit</button>
 			</form>
 
 		</div>
 	</div>
-	<div class="span8">
+	<div class="span7">
 		<div class="hero-unit">
 			<h3> Welcome to LifeTracker! </h3>
 				
