@@ -37,13 +37,11 @@ def contact(request):
         'form': form,
     }, context_instance=RequestContext(request))
 
+
 def isUsernameAvailable(request):
     response_str = "false"
-
-    print "isUsernameAvailable", request
     if request.is_ajax():
         username = request.GET.get("username")
-        print "username:", username
         if User.objects.filter(username=str(username)).count() >= 1:
             response_str = "false"
         else:
@@ -52,6 +50,7 @@ def isUsernameAvailable(request):
 
 @csrf_protect
 def login(request):
+    ERROR_INVALID_LOGIN = False
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -65,9 +64,11 @@ def login(request):
                 else:
                     return HttpResponseRedirect('disabledAccount.html')
 
+        ERROR_INVALID_LOGIN = True
     form = LoginForm()
     return render_to_response('login.html', {
         'form': form,
+        'ERROR_INVALID_LOGIN': ERROR_INVALID_LOGIN,
     }, context_instance=RequestContext(request))
 
 

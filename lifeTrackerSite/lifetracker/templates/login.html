@@ -13,6 +13,14 @@
 				<fieldset>
 				<legend>Login</legend>
 
+
+				{% if ERROR_INVALID_LOGIN %}
+				<div class="alert alert-error">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					Invalid Login Info
+				</div>
+				{% endif %}
+
 	    		<div class="fieldWrapper">
 	        		{{ form.username.errors }}
 	       			<label for="id_username">Username:</label>
@@ -44,9 +52,6 @@
     	</div>
 
     </div>
-</div>
-
-
-<!-- <a href="forgotAccount.html"> Forgot Username or Password? </a> -->
+</div> 
 
 {% endblock %}

@@ -14,6 +14,8 @@
   <style type="text/css">
   body {
     padding-top: 20px;
+    height: 100%;
+    /* background-color: rgb(250,250,250); */
   }
 
   .container-narrow {
@@ -23,28 +25,13 @@
     margin: 30px 0;
   }
 
-  .jumbotron {
-    margin: 60px 0;
-    text-align: center;
-  }
-  .jumbotron h1 {
-    font-size: 72px;
-    line-height: 1;
-  }
-
-  html,
-  body {
-    height: 100%;
-    /* The html and body elements cannot have any padding or margin. */
-  }
 
   /* Wrapper for page content to push down footer */
   #wrap {
-    min-height: 100%;
+    /*min-height: 100%;*/
     height: auto !important;
-    height: 100%;
     /* Negative indent footer by it's height */
-    margin: 0 auto -60px;
+    margin: 0 auto 0px;
   }
 
   /* Set the fixed height of the footer here */
@@ -53,15 +40,6 @@
     height: 60px;
   }
   #footer {
-    background-color: #f5f5f5;
-  }
-
-  .container {
-    width: auto;
-    max-width: 680px;
-  }
-  .container .credit {
-    margin: 20px 0;
   }
 
       </style>
@@ -69,6 +47,8 @@
 </head>
 
 {% block body %}<body>{% endblock %}
+
+  <!-- Nav Bar -->
   <div id="wrap" class="container-narrow">
     <div class="masthead">
 
@@ -105,19 +85,20 @@
       <!-- Logo -->
       <h3 class="muted"><a href="/" style="text-decoration: none;">LifeTracker</a></h3>
     </div>
-
     <hr>
-    {% block content %}
-    {% endblock %}          
-  </div>
+  <!-- End Navbar -->
 
-  <div id="push"></div>
-
+  {% block content %}
+  {% endblock %}          
+  <!-- Start Footer -->
   <div id="footer"> 
-    <div class="container">
-      <p class="muted credit"> LifeTracker &copy; Larsen & Vitullo </p>
+    <div>
+      <p class="muted credit"> LifeTracker &copy; Larsen &amp; Vitullo </p>
     </div>
   </div>
+</div>
+
+  <!-- End Footer -->
 
   {% block extraheaders %}
   {% endblock %}
@@ -127,7 +108,6 @@
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
   ga('create', 'UA-41197233-1', 'lifetracker.us');
   ga('send', 'pageview');
 
